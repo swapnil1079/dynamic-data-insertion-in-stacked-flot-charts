@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Flot Examples: Stacking</title>
+	<link href="../examples.css" rel="stylesheet" type="text/css">
+	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
+	<script language="javascript" type="text/javascript" src="../../jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="../../jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="../../jquery.flot.stack.js"></script>
+	<script type="text/javascript" src="http://www.flotcharts.org/flot/jquery.flot.categories.js"></script>
+	<script type="text/javascript" src="../../axislabel.js"></script>
+<!--	<script type="text/javascript" src="http://www.flotcharts.org/flot/jquery.flot.js"></script> -->
+
+	
+	<script type="text/javascript">
+
+	$(function() {
+
+		 var d1 = [];
+		 var d2 =[];
+    for (var i = 0; i < 31; i += 1) {
+        d1.push([i, Math.random() * 10]);
+    }
+    for (var i = 0; i < 31; i += 1) {
+        d2.push([i, Math.random() * 10]);
+    }
+
+
+
+		
+            var stack = false,
+			bars = false,
+			lines = true,
+			steps = false;
+			
+     
+		function plotWithOptions() {
+			 var xmin  = 20;
+		   var xmax = 30;
+		   
+			
+		 var highlightPoint = 25;
+		   
+			
+		 plot = 	$.plot("#placeholder", [d1,d2], {
+				series: {
+					stack: stack,
+					lines: {
+						 show: lines,
+						fill: false,
+						steps: steps
+					},
+					bars: {
+						show: bars,
+						barWidth: 0.5
+					}
+					 
+				},
+				xaxis: {
+				show : true,
+           axisLabel : 'foo',
+                min:xmin,
+                max:xmax, 
+				mode: "categories",
+				tickLength: 0
+			},
+  yaxis: {
+   min:0,
+    max: 10,
+    tickSize: 2 ,
+     show : true,
+            axisLabel : 'bar',
+            position: 'left'
+
+},
+
+
+			
+			});
+			plot.highlight(0,highlightPoint);
+			$('#prevPoint').click(function(){
+        plot.unhighlight(0,highlightPoint);
+        highlightPoint -= 1;
+        xmin = highlightPoint - 5;
+        xmax = highlightPoint + 5;
+        plot.getOptions().xaxes[0].min = xmin;
+        plot.getOptions().xaxes[0].max = xmax;
+        plot.setupGrid();
+        plot.draw();  
+        plot.highlight(0,highlightPoint);
+    });
+    
+    $('#nextPoint').click(function(){
+
+        plot.unhighlight(0,highlightPoint);
+        highlightPoint += 1;
+        xmin = highlightPoint - 5;
+        xmax = highlightPoint + 5;
+        // console.log(xmin);
+        // console.log(xmax);
+        plot.getOptions().xaxes[0].min = xmin;
+        plot.getOptions().xaxes[0].max = xmax;
+        plot.setupGrid();
+        plot.draw();  
+        plot.highlight(0,highlightPoint);        
+    }); 
+
+
+		}
+
+		plotWithOptions();
+
+		
+
+	});
+
+	</script>
+</head>
+<body>
+
+	<div id="header">
+		<h2>Stacking</h2>
+	</div>
+
+	<div id="content">
+
+		<div class="demo-container">
+			<div id="placeholder" class="demo-placeholder"></div>
+		</div>
+
+		
+<button id="prevPoint">Previous</button>
+<button id="nextPoint">Next</button>
+
+	</div>
+
+	
+
+</body>
+</html>

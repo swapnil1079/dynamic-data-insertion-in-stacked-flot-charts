@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Flot Examples: Stacking</title>
+	<link href="../examples.css" rel="stylesheet" type="text/css">
+	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
+	<script language="javascript" type="text/javascript" src="../../jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="../../jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="../../jquery.flot.stack.js"></script>
+	<script type="text/javascript" src="http://www.flotcharts.org/flot/jquery.flot.categories.js"></script>
+	<script type="text/javascript" src="../../axislabel.js"></script>
+
+	
+	<script type="text/javascript">
+
+	$(function() {
+
+		var d1 = [];
+		var d2 = [];
+		var d3 = [];
+		var d4 = [];
+		var monthyear = ["01/2016", "02/2016", "03/2016","04/2016","05/2016","06/2016"];
+
+ //  var numbers = [6.2,2.4,1.6,12.3,0,5.6,11.2,0]
+	for (var i = 0; i <  monthyear.length; i += 1) 
+		{
+              //  console.log(monthyear);         
+			d1.push([monthyear[i],parseInt(Math.random() * 30)*parseInt(12)]);
+			d2.push([monthyear[i],parseInt(Math.random() * 30)*parseInt(12)]);
+			d3.push([monthyear[i],parseInt(Math.random() * 30)*parseInt(12)]);
+		}  
+
+
+	/*for (var i = 0; i < numbers.length ; i += 1) 
+		{
+			  //  console.log(parseInt(Math.random() * 30));
+                          
+			d1.push([i,1000*numbers[i]]);
+			d2.push([i,1000*numbers[i]]);
+			d3.push([i,1000*numbers[i]]);
+		}   */    
+		    //  d1 = {label:'rwq',data:d1}  
+		    //  d2 = {label:'rwqw',data:d2} 
+		    //  d3 = {label:'rwqz',data:d3} 
+	//	d4.push({label:'rwq',data:d1},{label:'rwqw',data:d2} ,{label:'rwqz',data:d3});
+	 d4.push(d1,d2,d3);
+		  //  console.log(d4);
+		//var data = [ ["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9] ];
+		//console.log(data);
+         //  console.log(d4);
+            var stack = false,
+			bars = false,
+			lines = true,
+			steps = false;
+			//var xmin = monthyear[0];
+			//var xmax = monthyear[5];
+
+		function plotWithOptions() {
+		//	console.log(xmin);
+		//	console.log(xmax);
+			 var highlightPoint = 1;
+			 var xmin = 0;
+			 var xmax = 4;
+	var plot = 	$.plot("#placeholder", d4, {
+				series: {
+					stack: stack,
+					lines: {
+						 show: lines,
+						fill: false,
+						steps: steps
+					},
+					bars: {
+						show: bars,
+						barWidth: 0.5
+					}
+					 
+				},
+				xaxis: {
+				show : true,
+           axisLabel : 'foo',
+               min:xmin,
+             max:xmax,
+				mode: "categories",
+				tickLength: 0
+			},
+  yaxis: {
+   min:0,
+    max: 400,
+    tickSize: 40 ,
+     show : true,
+            axisLabel : 'bar',
+            position: 'left'
+
+},
+
+			
+			});
+	//	plot.highlight(0,highlightPoint);
+
+		$('#prevPoint').click(function(){
+        plot.unhighlight(0,highlightPoint);
+        highlightPoint -= 1;
+        xmin = highlightPoint - 2;
+        xmax = highlightPoint + 2;
+        plot.getOptions().xaxes[0].min = xmin;
+        plot.getOptions().xaxes[0].max = xmax;
+        plot.setupGrid();
+        plot.draw();  
+        plot.highlight(0,highlightPoint);
+    });
+    
+    $('#nextPoint').click(function(){
+
+        plot.unhighlight(0,highlightPoint);
+        highlightPoint += 1;
+        xmin = highlightPoint - 2;
+        xmax = highlightPoint + 2;
+        // console.log(xmin);
+        // console.log(xmax);
+        plot.getOptions().xaxes[0].min = xmin;
+        plot.getOptions().xaxes[0].max = xmax;
+        plot.setupGrid();
+        plot.draw();  
+        plot.highlight(0,highlightPoint);        
+    });
+		}
+
+		plotWithOptions();
+
+	});
+
+	</script>
+</head>
+<body>
+
+	<div id="header">
+		<h2>Stacking</h2>
+	</div>
+
+	<div id="content">
+
+		<div class="demo-container">
+			<div id="placeholder" class="demo-placeholder"></div>
+		</div>
+
+		
+<button id="prevPoint">Previous</button>
+<button id="nextPoint">Next</button>
+
+	</div>
+
+	
+
+</body>
+</html>
